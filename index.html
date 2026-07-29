@@ -1,0 +1,470 @@
+<!DOCTYPE html><html lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Rabia — Data Analyst / BI Specialist</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;family=Inter:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: { 
+          zinc: { 950: '#09090b' },
+          emerald: { 500: '#10b981' }
+        },
+        fontFamily: {
+          display: ['"Space Grotesk"', 'sans-serif'],
+          body: ['"Inter"', 'sans-serif'],
+          mono: ['"IBM Plex Mono"', 'monospace'],
+        }
+      }
+    }
+  }
+</script>
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+      animation-delay: -1ms !important;
+      animation-duration: 1ms !important;
+      animation-iteration-count: 1 !important;
+      background-attachment: initial !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0s !important;
+      transition-delay: 0s !important;
+    }
+    .reveal { opacity: 1 !important; transform: none !important; }
+  }
+
+  body { background: #09090b; color: #e4e4e7; overflow-x: hidden; }
+  
+  /* Shader Background */
+  .shader-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.4;
+  }
+
+  .grid-line { 
+    background-image: linear-gradient(#18181b 1px, transparent 1px), linear-gradient(90deg, #18181b 1px, transparent 1px); 
+    background-size: 40px 40px; 
+    position: relative;
+  }
+  
+  @keyframes gridFlicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+    70% { opacity: 0.9; }
+    85% { opacity: 0.6; }
+  }
+  .grid-flicker { animation: gridFlicker 8s infinite ease-in-out; }
+
+  .bento-card { 
+    background: rgba(17, 17, 19, 0.8); 
+    border: 1px solid #27272a; 
+    border-radius: 24px;
+    transition: all 0.6s cubic-bezier(0.2, 0.7, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+  }
+  .bento-card:hover { 
+    border-color: #10b98166; 
+    transform: translateY(-8px) scale(1.01); 
+    box-shadow: 0 30px 60px -20px rgba(16, 185, 129, 0.2);
+  }
+
+  .glow-text { text-shadow: 0 0 24px rgba(16, 185, 129, 0.35); }
+  
+  .reveal { 
+    opacity: 0; 
+    transform: translateY(40px); 
+    transition: opacity 0.8s cubic-bezier(0.2, 0.7, 0.3, 1), transform 0.8s cubic-bezier(0.2, 0.7, 0.3, 1); 
+  }
+  .reveal.show { opacity: 1; transform: translateY(0); }
+
+  .badge { 
+    background: #18181b; 
+    border: 1px solid #27272a; 
+    padding: 4px 12px; 
+    border-radius: 9999px; 
+    font-size: 0.75rem; 
+    color: #a1a1aa;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .badge:hover { border-color: #10b981; color: #10b981; background: #10b98111; transform: translateY(-2px); }
+
+  .lightbox { display: none; position: fixed; inset: 0; background: rgba(9, 9, 11, 0.96); z-index: 100; align-items: center; justify-content: center; padding: 2rem; cursor: zoom-out; backdrop-filter: blur(12px); }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 100%; max-height: 90vh; border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border: 1px solid #3f3f46; }
+
+  .blob { 
+    position: absolute; 
+    width: 400px; 
+    height: 400px; 
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.12), transparent 70%); 
+    border-radius: 50%; 
+    filter: blur(40px); 
+    pointer-events: none; 
+    z-index: 0;
+  }
+
+  .timeline-dot::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 2rem;
+    bottom: -2rem;
+    width: 1px;
+    background: linear-gradient(to bottom, #10b98144, transparent);
+    transform: translateX(-50%);
+  }
+  .timeline-item:last-child .timeline-dot::after { display: none; }
+
+  .magnetic-area { display: inline-block; transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.3, 1); }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+</style>
+</head>
+<body class="font-body selection:bg-emerald-500/30 selection:text-emerald-400">
+<div class="shader-bg">{{DATA:ANIMATION:ANIMATION_1}}</div>
+<div class="fixed inset-0 grid-line grid-flicker pointer-events-none -z-10"></div>
+<nav class="fixed top-0 w-full z-50 backdrop-blur-md bg-zinc-950/70 border-b border-zinc-800/50">
+<div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+<div class="font-display font-bold text-xl tracking-tight">Rabia<span class="text-emerald-500">.</span></div>
+<div class="hidden md:flex gap-8 text-sm font-medium text-zinc-400">
+<a class="hover:text-emerald-400 transition-colors" href="#work">Portfolios</a>
+<a class="hover:text-emerald-400 transition-colors" href="#experience">Experience</a>
+<a class="hover:text-emerald-400 transition-colors" href="#stack">Stack</a>
+</div>
+<div class="magnetic-wrap">
+<a class="magnetic-btn inline-block bg-emerald-500 text-zinc-950 text-xs font-bold uppercase tracking-widest px-5 py-2.5 rounded-full hover:bg-emerald-400 transition-all active:scale-95" href="#contact">Contact</a>
+</div>
+</div>
+</nav>
+<main class="max-w-7xl mx-auto px-6 pt-32 pb-20 relative z-10">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- ROW 1: Hero & Metrics -->
+<div class="bento-card md:col-span-2 p-8 md:p-12 flex flex-col justify-center min-h-[400px] reveal">
+<div class="blob -top-20 -right-20"></div>
+<div class="relative z-10">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono mb-6">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          Data Analyst / BI Specialist
+        </div><div class="block mt-2"><div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-mono uppercase tracking-wider"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span></span>Available for Remote Work</div></div>
+<h1 class="font-display text-4xl md:text-6xl font-bold text-white leading-[1.1] mb-6">
+          Turning raw data into <br><span class="text-emerald-500 glow-text">strategic decisions.</span>
+</h1>
+<p class="text-zinc-400 text-lg max-w-xl leading-relaxed">
+          I bridge the gap between complex datasets and actionable insights through high-performance dashboards and predictive modeling.
+        </p>
+</div>
+</div>
+<div class="bento-card p-8 flex flex-col justify-between reveal" style="transition-delay: 100ms;">
+<div class="space-y-8">
+<div class="group">
+<div class="text-3xl font-display font-bold text-white mb-1">
+<span class="counter text-emerald-500" data-target="10">0</span>M+
+          </div>
+<div class="text-xs uppercase tracking-widest text-zinc-500 font-mono">Rows Cleaned</div>
+</div>
+<div class="h-px bg-zinc-800/50"></div>
+<div class="group">
+<div class="text-3xl font-display font-bold text-white mb-1">
+<span class="counter text-emerald-500" data-target="15">0</span>+
+          </div>
+<div class="text-xs uppercase tracking-widest text-zinc-500 font-mono">Dashboards Shipped</div>
+</div>
+<div class="h-px bg-zinc-800/50"></div>
+<div class="group">
+<div class="text-3xl font-display font-bold text-white mb-1">
+<span class="counter text-emerald-500" data-target="15">0</span>%
+          </div>
+<div class="text-xs uppercase tracking-widest text-zinc-500 font-mono">Efficiency Gain</div>
+</div>
+</div>
+</div>
+<!-- SECTION: Selected Dashboards (Reorganized 3-Column Grid) -->
+<div class="md:col-span-3 flex items-center gap-4 mt-6 mb-2 reveal">
+<h2 class="font-display text-3xl font-bold text-white">Dashboards</h2>
+<div class="h-px flex-1 bg-zinc-800"></div>
+</div>
+<div class="md:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6" id="work">
+<!-- HR Attrition Intelligence Card -->
+<div class="bento-card p-8 reveal flex flex-col show" style="transition-delay: 200ms;">
+<div class="mb-6">
+<div class="inline-block px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 text-[10px] font-mono mb-3 uppercase">People Analytics</div>
+<h3 class="font-display text-xl font-bold text-white mb-1">HR Attrition Intelligence</h3>
+<p class="text-[10px] text-zinc-500 font-mono italic">Predictive 'What-If' modeling for risk</p>
+</div>
+<div class="mb-6 space-y-3">
+<div class="magnetic-wrap aspect-video rounded-xl overflow-hidden border border-zinc-800 group cursor-zoom-in" onclick="openLightbox('images/hr-overview.png')">
+<img class="magnetic-item w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="HR Attrition Dashboard Overview" src="images/hr-overview.png">
+</div>
+<div class="grid grid-cols-4 gap-2">
+<img class="aspect-video rounded border border-zinc-800 object-cover cursor-pointer hover:border-emerald-500 transition-colors" onclick="openLightbox(this.src)" alt="HR What-If Salary Hike Impact Analysis" src="images/hr-whatif-analysis.png">
+<img class="aspect-video rounded border border-zinc-800 object-cover cursor-pointer hover:border-emerald-500 transition-colors" onclick="openLightbox(this.src)" alt="HR Satisfaction and Work-Life Balance Analysis" src="images/hr-satisfaction-worklife.png">
+<img class="aspect-video rounded border border-zinc-800 object-cover cursor-pointer hover:border-emerald-500 transition-colors" onclick="openLightbox(this.src)" alt="HR Job and Income Analysis" src="images/hr-job-income.png">
+<img class="aspect-video rounded border border-zinc-800 object-cover cursor-pointer hover:border-emerald-500 transition-colors" onclick="openLightbox(this.src)" alt="HR Demographics Analysis" src="images/hr-demographics.png">
+</div>
+</div>
+<div class="mt-auto space-y-3">
+<div class="p-3 rounded-xl bg-zinc-900/50 border border-zinc-800">
+<span class="text-[10px] font-mono text-emerald-500 block mb-1">IMPACT</span>
+<p class="text-[11px] text-zinc-400">Identified 40% higher attrition in U-25 employees, leading to targeted retention strategies.</p>
+</div>
+<div class="p-3 rounded-xl bg-zinc-900/50 border border-zinc-800">
+<span class="text-[10px] font-mono text-emerald-500 block mb-1">TECH</span>
+<p class="text-[11px] text-zinc-400">Advanced DAX for 'What-If' parameters and Power Query ETL for 1,470+ records.</p>
+</div>
+</div>
+</div>
+<!-- Sales Performance Card -->
+<div class="bento-card p-8 reveal flex flex-col show" style="transition-delay: 250ms;">
+<div class="mb-6">
+<div class="inline-block px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 text-[10px] font-mono mb-3 uppercase">E-commerce Analytics</div>
+<h3 class="font-display text-xl font-bold text-white mb-1">Sales Performance</h3>
+<p class="text-[10px] text-zinc-500 font-mono italic">Revenue tracking &amp; forecasting</p>
+</div>
+<div class="mb-6">
+<div class="aspect-video rounded-xl overflow-hidden border border-zinc-800 cursor-zoom-in group magnetic-wrap" onclick="openLightbox('images/sales-performance-dashboard.png')">
+<img class="magnetic-item w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Sales Performance Dashboard" src="images/sales-performance-dashboard.png">
+</div>
+</div>
+<div class="mt-auto space-y-4">
+<p class="text-sm text-zinc-400 leading-relaxed">
+    Analyzing $24M revenue, units sold, and monthly revenue forecasting for inventory optimization.
+</p>
+<div class="space-y-2">
+<div class="flex gap-2 items-start">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0"></span>
+<p class="text-[11px] text-zinc-500 leading-tight">High-performance tracking for electronics category drivers.</p>
+</div>
+<div class="flex gap-2 items-start">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0"></span>
+<p class="text-[11px] text-zinc-500 leading-tight">Monthly revenue forecasting for inventory optimization.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Retail Sales Performance Card -->
+<div class="bento-card p-8 reveal flex flex-col show" style="transition-delay: 300ms;">
+<div class="mb-6">
+<div class="inline-block px-2 py-0.5 rounded bg-zinc-800 text-zinc-400 text-[10px] font-mono mb-3 uppercase">Retail Analytics</div>
+<h3 class="font-display text-xl font-bold text-white mb-1">Retail Sales Engine</h3>
+<p class="text-[10px] text-zinc-500 font-mono italic">Profit margin &amp; regional analysis</p>
+</div>
+<div class="mb-6">
+<div class="aspect-video rounded-xl overflow-hidden border border-zinc-800 cursor-zoom-in group magnetic-wrap" onclick="openLightbox('images/retail-sales-performance.png')">
+<img class="magnetic-item w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Retail Sales Performance Dashboard" src="images/retail-sales-performance.png">
+</div>
+</div>
+<div class="mt-auto">
+<div class="text-3xl font-display font-bold text-emerald-500 mb-1">$437k+</div>
+<p class="text-zinc-500 text-[10px] font-mono uppercase tracking-widest mb-4">Total Sales Analyzed</p>
+<p class="text-sm text-zinc-400 leading-relaxed">
+    Multi-state profit margin analysis dashboard featuring category-level drill-downs and payment mode distributions.
+</p>
+</div>
+</div>
+</div>
+<!-- ROW 3: Expertise & Experience (Foundation & History) -->
+<div class="bento-card p-8 reveal flex flex-col h-full show" id="stack" style="transition-delay: 350ms;">
+<h3 class="font-display text-xl font-bold text-white mb-6">Expertise</h3>
+<div class="space-y-6 flex-grow">
+<div>
+<span class="text-[10px] font-mono text-zinc-500 uppercase tracking-widest block mb-3">Core Analytics</span>
+<div class="flex flex-wrap gap-2">
+<span class="badge">SQL</span>
+<span class="badge">Python</span>
+<span class="badge">Pandas</span>
+<span class="badge">NumPy</span>
+</div>
+</div>
+<div>
+<span class="text-[10px] font-mono text-zinc-500 uppercase tracking-widest block mb-3">Visualization</span>
+<div class="flex flex-wrap gap-2">
+<span class="badge">Power BI</span>
+
+<span class="badge">Excel</span>
+<span class="badge">Data Modeling</span><span class="badge">DAX</span><span class="badge">Power Query</span><span class="badge">Data Cleaning</span></div>
+</div>
+
+</div>
+<div class="mt-8 pt-6 border-t border-zinc-800">
+<span class="text-[10px] font-mono text-zinc-500 uppercase tracking-widest block mb-4">Credentials</span>
+<div class="grid grid-cols-2 gap-3">
+<div class="group relative cursor-zoom-in magnetic-wrap" onclick="openLightbox('images/cert-python-for-ai.png')">
+<div class="magnetic-item aspect-[1.5/1] rounded-lg overflow-hidden border border-zinc-800 bg-zinc-900">
+<img alt="Python for AI Certificate" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="images/cert-python-for-ai.png">
+</div>
+<p class="text-[9px] font-mono text-zinc-500 mt-2 truncate text-center">Python for AI</p>
+</div>
+<div class="group relative cursor-zoom-in magnetic-wrap" onclick="openLightbox('images/cert-bi-specialist.png')">
+<div class="magnetic-item aspect-[1.5/1] rounded-lg overflow-hidden border border-zinc-800 bg-zinc-900">
+<img alt="Power BI Analyst Certificate" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="images/cert-bi-specialist.png">
+</div>
+<p class="text-[9px] font-mono text-zinc-500 mt-2 truncate text-center">BI Specialist</p>
+</div>
+</div>
+</div>
+</div>
+<div class="bento-card md:col-span-2 p-8 md:p-12 reveal" id="experience" style="transition-delay: 400ms;">
+<div class="flex items-center gap-4 mb-12">
+<h3 class="font-display text-3xl font-bold text-white">Experience</h3>
+<div class="h-px flex-1 bg-zinc-800"></div>
+<span class="text-sm font-mono text-zinc-500">1.5 Years Professional Path</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12 relative">
+<div class="timeline-item relative">
+<div class="timeline-dot absolute -left-6 top-1.5 w-3 h-3 rounded-full bg-emerald-500 ring-4 ring-emerald-500/20"></div>
+<div class="mb-2">
+<span class="text-emerald-500 font-mono text-xs">PRESENT</span>
+<h4 class="text-white font-bold text-lg">BI Consultant</h4>
+<p class="text-zinc-500 text-sm">Freelance / <a class="text-emerald-500 hover:underline" href="https://www.fiverr.com/s/7YR385x" target="_blank">Fiverr</a></p>
+</div>
+<p class="text-zinc-400 text-sm leading-relaxed">
+            Automating KPI tracking for diverse clients and building production-grade Power BI dashboards with complex DAX measures.
+          </p>
+</div>
+<div class="timeline-item relative">
+<div class="timeline-dot absolute -left-6 top-1.5 w-3 h-3 rounded-full bg-zinc-700"></div>
+<div class="mb-2">
+<span class="text-zinc-500 font-mono text-xs">2024 - 2025</span>
+<h4 class="text-white font-bold text-lg">Predictive Modeling</h4>
+<p class="text-zinc-500 text-sm">Project Lead</p>
+</div>
+<p class="text-zinc-400 text-sm leading-relaxed">
+            Implemented A/B testing frameworks and predictive attrition models using Python, improving decision speed by 25%.
+          </p>
+</div>
+<div class="timeline-item relative md:col-span-2">
+<div class="timeline-dot absolute -left-6 top-1.5 w-3 h-3 rounded-full bg-zinc-700"></div>
+<div class="mb-2">
+<span class="text-zinc-500 font-mono text-xs">2023 - 2024</span>
+<h4 class="text-white font-bold text-lg">Data Specialist</h4>
+<p class="text-zinc-500 text-sm">Academic Excellence</p>
+</div>
+<p class="text-zinc-400 text-sm leading-relaxed">
+            Gold Medalist in Computer Science, focusing on data structures, statistical analysis, and algorithmic efficiency.
+          </p>
+</div>
+</div>
+</div>
+<!-- ROW 4: Contact (Final Action) -->
+<div class="bento-card md:col-span-3 p-8 md:p-12 reveal" id="contact" style="transition-delay: 500ms;">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+<div>
+<h3 class="font-display text-3xl font-bold text-white mb-4">Let's Connect</h3>
+<p class="text-zinc-400 mb-8 max-w-md">Ready to bring clarity to your data? I'm available for freelance BI consulting and full-time analytics roles. Let's discuss how data can drive your strategy.</p>
+<div class="flex flex-wrap gap-4">
+<a class="bg-emerald-500 text-zinc-950 font-bold px-8 py-3 rounded-full hover:bg-emerald-400 transition-all" href="mailto:rabiamaqsood061@gmail.com">Send Message</a>
+<a class="border border-zinc-800 text-white font-bold px-8 py-3 rounded-full hover:bg-zinc-800 transition-all" href="https://www.linkedin.com/in/rabia-maqsood-a26804274" target="_blank">LinkedIn</a>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-3">
+<div class="magnetic-wrap w-full">
+<a class="magnetic-item flex items-center justify-between p-5 rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-emerald-500/50 hover:bg-zinc-800/50 transition-all group w-full" href="mailto:rabiamaqsood061@gmail.com">
+<span class="text-sm font-medium">Email</span>
+<svg class="w-5 h-5 text-zinc-500 group-hover:text-emerald-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</a>
+</div>
+<div class="magnetic-wrap w-full">
+<a class="magnetic-item flex items-center justify-between p-5 rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-emerald-500/50 hover:bg-zinc-800/50 transition-all group w-full" href="https://github.com/RabiaMaqsood-01/RabiaMaqsood-01" target="_blank">
+<span class="text-sm font-medium">GitHub Repository</span>
+<svg class="w-5 h-5 text-zinc-500 group-hover:text-emerald-500 transition-colors" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path></svg>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer class="mt-20 pt-10 border-t border-zinc-900 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-600 uppercase tracking-widest">
+<div class="">Rabia © 2026 — Data Portfolio</div>
+<div class="flex gap-6">
+<span class="">Built with Tailwind CSS</span>
+<span class="">V.2.0.4</span>
+</div>
+</footer>
+</main>
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+<img alt="Portfolio Showcase" id="lightbox-img" src="">
+</div>
+<script>
+  function openLightbox(src) {
+    const lb = document.getElementById('lightbox');
+    const img = document.getElementById('lightbox-img');
+    img.src = src;
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = 'auto';
+  }
+
+  function animateValue(obj, start, end, duration) {
+    let startTimestamp = null;
+    const step = (timestamp) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      const value = Math.floor(progress * (end - start) + start);
+      obj.innerHTML = value;
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      }
+    };
+    window.requestAnimationFrame(step);
+  }
+
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('show');
+        const counters = entry.target.querySelectorAll('.counter');
+        counters.forEach(counter => {
+          if (!counter.dataset.animated) {
+            animateValue(counter, 0, parseInt(counter.dataset.target), 1500);
+            counter.dataset.animated = "true";
+          }
+        });
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+    document.querySelectorAll('.magnetic-wrap').forEach(wrap => {
+      const item = wrap.querySelector('.magnetic-item, .magnetic-btn') || wrap;
+      
+      wrap.addEventListener('mousemove', (e) => {
+        const rect = wrap.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        item.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+      });
+      
+      wrap.addEventListener('mouseleave', () => {
+        item.style.transform = 'translate(0px, 0px)';
+      });
+    });
+  }
+</script>
+
+
+
+
+
+
+</body></html>
